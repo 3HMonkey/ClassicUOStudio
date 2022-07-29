@@ -278,7 +278,7 @@ namespace ClassicUO.IO.Resources
             int pwidth = endX - startX;
             int pheight = endY - startY;
 
-            uint[] map = System.Buffers.ArrayPool<uint>.Shared.Rent(pwidth * pheight);
+            uint[] map = System.Buffers.ArrayPool<uint>.Shared.Rent(pwidth * pheight, true);
             Texture2D texture = new Texture2D(Client.Game.GraphicsDevice, pwidth, pheight, false, SurfaceFormat.Color);
 
             try
@@ -311,7 +311,7 @@ namespace ClassicUO.IO.Resources
             }
             finally
             {
-                System.Buffers.ArrayPool<uint>.Shared.Return(map, true);
+                System.Buffers.ArrayPool<uint>.Shared.Return(map);
             }
 
 

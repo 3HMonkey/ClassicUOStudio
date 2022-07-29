@@ -124,7 +124,7 @@ namespace ClassicUO
             const int LIGHTS_TEXTURE_WIDTH = 32;
             const int LIGHTS_TEXTURE_HEIGHT = 63;
 
-            uint[] buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(TEXTURE_WIDTH * TEXTURE_HEIGHT * 2);
+            uint[] buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(TEXTURE_WIDTH * TEXTURE_HEIGHT * 2, true);
 
             try
             {
@@ -138,11 +138,11 @@ namespace ClassicUO
             }
             finally
             {
-                System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
+                System.Buffers.ArrayPool<uint>.Shared.Return(buffer);
             }
 
 
-            buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(LIGHTS_TEXTURE_WIDTH * LIGHTS_TEXTURE_HEIGHT);
+            buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(LIGHTS_TEXTURE_WIDTH * LIGHTS_TEXTURE_HEIGHT, true);
 
             try
             {
@@ -153,7 +153,7 @@ namespace ClassicUO
             }
             finally
             {
-                System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
+                System.Buffers.ArrayPool<uint>.Shared.Return(buffer);
             }
            
 

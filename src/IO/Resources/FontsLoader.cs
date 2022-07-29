@@ -678,7 +678,7 @@ namespace ClassicUO.IO.Resources
             }
 
             int blocksize = height * width;
-            uint[] pData = System.Buffers.ArrayPool<uint>.Shared.Rent(blocksize);
+            uint[] pData = System.Buffers.ArrayPool<uint>.Shared.Rent(blocksize, true);
 
             pData.AsSpan(0, blocksize).Clear();
 
@@ -812,7 +812,7 @@ namespace ClassicUO.IO.Resources
             }
             finally
             {
-                System.Buffers.ArrayPool<uint>.Shared.Return(pData, true);
+                System.Buffers.ArrayPool<uint>.Shared.Return(pData);
             }
         }
 
@@ -1821,7 +1821,7 @@ namespace ClassicUO.IO.Resources
 
             height += _htmlStatus.Margins.Y + _htmlStatus.Margins.Height + 4;
             int blocksize = height * width;
-            uint[] pData = System.Buffers.ArrayPool<uint>.Shared.Rent(blocksize);
+            uint[] pData = System.Buffers.ArrayPool<uint>.Shared.Rent(blocksize, true);
 
             pData.AsSpan(0, blocksize).Clear();
 
@@ -2350,7 +2350,7 @@ namespace ClassicUO.IO.Resources
             }
             finally
             {
-                System.Buffers.ArrayPool<uint>.Shared.Return(pData, true);
+                System.Buffers.ArrayPool<uint>.Shared.Return(pData);
             }
         }
 

@@ -188,7 +188,7 @@ namespace ClassicUO.IO.Resources
 
             uint[] buffer = null;
 
-            Span<uint> pixels = entry.Width * entry.Height <= 1024 ? stackalloc uint[1024] : (buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(entry.Width * entry.Height));
+            Span<uint> pixels = entry.Width * entry.Height <= 1024 ? stackalloc uint[1024] : (buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(entry.Width * entry.Height, true));
 
             try
             {
@@ -244,7 +244,7 @@ namespace ClassicUO.IO.Resources
             {
                 if (buffer != null)
                 {
-                    System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
+                    System.Buffers.ArrayPool<uint>.Shared.Return(buffer);
                 }             
             }
         }
