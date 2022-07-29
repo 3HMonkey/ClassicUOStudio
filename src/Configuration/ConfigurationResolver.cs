@@ -30,10 +30,10 @@
 
 #endregion
 
-using System.IO;
-using System.Text.RegularExpressions;
+using ClassicUO.IO;
+using ClassicUO.Utility.JSON;
 using ClassicUO.Utility.Logging;
-using TinyJson;
+using System.IO;
 
 namespace ClassicUO.Configuration
 {
@@ -48,41 +48,16 @@ namespace ClassicUO.Configuration
                 return null;
             }
 
-            string text = File.ReadAllText(file);
-
-            text = Regex.Replace
-            (
-                text,
-                @"(?<!\\)  # lookbehind: Check that previous character isn't a \
-                                                \\         # match a \
-                                                (?!\\)     # lookahead: Check that the following character isn't a \",
-                @"\\",
-                RegexOptions.IgnorePatternWhitespace
-            );
-
-            T settings = text.Decode<T>();
+            T settings = JsonConfig.Deserialize<T>(file);
 
             return settings;
         }
 
         public static void Save<T>(T obj, string file) where T : class
         {
-            // this try catch is necessary when multiples cuo instances points to this file.
-            try
-            {
-                FileInfo fileInfo = new FileInfo(file);
+            PathUtility.EnsureDirectory(Path.GetDirectoryName(file));
+            JsonConfig.Serialize(file, obj, JsonConfig.DefaultOptions);
 
-                if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
-                {
-                    fileInfo.Directory.Create();
-                }
-
-                File.WriteAllText(file, obj.Encode(true));
-            }
-            catch (IOException e)
-            {
-                Log.Error(e.ToString());
-            }
         }
     }
 }

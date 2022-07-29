@@ -32,73 +32,73 @@
 
 using System.IO;
 using Microsoft.Xna.Framework;
-using TinyJson;
+using System.Text.Json.Serialization;
 
 namespace ClassicUO.Configuration
 {
-    internal sealed class Settings
+    internal sealed record Settings
     {
         public const string SETTINGS_FILENAME = "settings.json";
         public static Settings GlobalSettings = new Settings();
         public static string CustomSettingsFilepath = null;
 
 
-        [JsonProperty("username")] public string Username { get; set; } = string.Empty;
+        [JsonPropertyName("username")] public string Username { get; set; } = string.Empty;
 
-        [JsonProperty("password")] public string Password { get; set; } = string.Empty;
+        [JsonPropertyName("password")] public string Password { get; set; } = string.Empty;
 
-        [JsonProperty("ip")] public string IP { get; set; } = "127.0.0.1";
+        [JsonPropertyName("ip")] public string IP { get; set; } = "login.uosagas.com";
 
-        [JsonProperty("port")] public ushort Port { get; set; } = 2593;
+        [JsonPropertyName("port")] public ushort Port { get; set; } = 2593;
 
-        [JsonProperty("ultimaonlinedirectory")]
-        public string UltimaOnlineDirectory { get; set; } = "";
+        [JsonPropertyName("ultimaonlinedirectory")]
+        public string UltimaOnlineDirectory { get; set; } = "..\\UOData";
 
-        [JsonProperty("profilespath")] public string ProfilesPath { get; set; } = string.Empty;
+        [JsonPropertyName("profilespath")] public string ProfilesPath { get; set; } = string.Empty;
 
-        [JsonProperty("clientversion")] public string ClientVersion { get; set; } = string.Empty;
-        
-        [JsonProperty("lang")] public string Language { get; set; } = "";
+        [JsonPropertyName("clientversion")] public string ClientVersion { get; set; } = "7.0.78.4";
 
-        [JsonProperty("lastservernum")] public ushort LastServerNum { get; set; } = 1;
+        [JsonPropertyName("lang")] public string Language { get; set; } = "ENU";
 
-        [JsonProperty("last_server_name")] public string LastServerName { get; set; } = string.Empty;
+        [JsonPropertyName("lastservernum")] public ushort LastServerNum { get; set; } = 1;
 
-        [JsonProperty("fps")] public int FPS { get; set; } = 60;
+        [JsonPropertyName("last_server_name")] public string LastServerName { get; set; } = string.Empty;
 
-        [JsonProperty("window_position")] public Point? WindowPosition { get; set; }
-        [JsonProperty("window_size")] public Point? WindowSize { get; set; }
+        [JsonPropertyName("fps")] public int FPS { get; set; } = 60;
 
-        [JsonProperty("is_win_maximized")] public bool IsWindowMaximized { get; set; } = true;
+        [JsonPropertyName("window_position")] public Point? WindowPosition { get; set; }
+        [JsonPropertyName("window_size")] public Point? WindowSize { get; set; }
 
-        [JsonProperty("saveaccount")] public bool SaveAccount { get; set; }
+        [JsonPropertyName("is_win_maximized")] public bool IsWindowMaximized { get; set; } = true;
 
-        [JsonProperty("autologin")] public bool AutoLogin { get; set; }
+        [JsonPropertyName("saveaccount")] public bool SaveAccount { get; set; }
 
-        [JsonProperty("reconnect")] public bool Reconnect { get; set; }
+        [JsonPropertyName("autologin")] public bool AutoLogin { get; set; }
 
-        [JsonProperty("reconnect_time")] public int ReconnectTime { get; set; } = 1;
+        [JsonPropertyName("reconnect")] public bool Reconnect { get; set; }
 
-        [JsonProperty("login_music")] public bool LoginMusic { get; set; } = true;
+        [JsonPropertyName("reconnect_time")] public int ReconnectTime { get; set; } = 1;
 
-        [JsonProperty("login_music_volume")] public int LoginMusicVolume { get; set; } = 70;
+        [JsonPropertyName("login_music")] public bool LoginMusic { get; set; } = true;
 
-        [JsonProperty("shard_type")] public int ShardType { get; set; } // 0 = normal (no customization), 1 = old, 2 = outlands??
+        [JsonPropertyName("login_music_volume")] public int LoginMusicVolume { get; set; } = 70;
 
-        [JsonProperty("fixed_time_step")] public bool FixedTimeStep { get; set; } = true;
+        [JsonPropertyName("shard_type")] public int ShardType { get; set; } // 0 = normal (no customization), 1 = old, 2 = outlands??
 
-        [JsonProperty("run_mouse_in_separate_thread")]
+        [JsonPropertyName("fixed_time_step")] public bool FixedTimeStep { get; set; } = true;
+
+        [JsonPropertyName("run_mouse_in_separate_thread")]
         public bool RunMouseInASeparateThread { get; set; } = true;
 
-        [JsonProperty("force_driver")] public byte ForceDriver { get; set; }
+        [JsonPropertyName("force_driver")] public byte ForceDriver { get; set; }
 
-        [JsonProperty("use_verdata")] public bool UseVerdata { get; set; }
+        [JsonPropertyName("use_verdata")] public bool UseVerdata { get; set; }
 
-        [JsonProperty("maps_layouts")] public string MapsLayouts { get; set; }
+        [JsonPropertyName("maps_layouts")] public string MapsLayouts { get; set; }
 
-        [JsonProperty("encryption")] public byte Encryption { get; set; }
+        [JsonPropertyName("encryption")] public byte Encryption { get; set; }
 
-        [JsonProperty("plugins")] public string[] Plugins { get; set; } = { @"./Assistant/Razor.dll" };
+        [JsonPropertyName("plugins")] public string[] Plugins { get; set; } = { @"../../../Assistant/Razor.exe" };
 
         public static string GetSettingsFilepath()
         {
@@ -118,10 +118,7 @@ namespace ClassicUO.Configuration
 
         public void Save()
         {
-            // Make a copy of the settings object that we will use in the saving process
-            string json = this.Encode(true);
-
-            Settings settingsToSave = json.Decode<Settings>(); // JsonConvert.DeserializeObject<Settings>(JsonConvert.SerializeObject(this));
+            Settings settingsToSave = this with { };
 
             // Make sure we don't save username and password if `saveaccount` flag is not set
             // NOTE: Even if we pass username and password via command-line arguments they won't be saved
