@@ -680,6 +680,8 @@ namespace ClassicUO.IO.Resources
             int blocksize = height * width;
             uint[] pData = System.Buffers.ArrayPool<uint>.Shared.Rent(blocksize);
 
+            pData.AsSpan(0, blocksize).Clear();
+
             try
             {
                 int lineOffsY = 0;
@@ -1820,6 +1822,8 @@ namespace ClassicUO.IO.Resources
             height += _htmlStatus.Margins.Y + _htmlStatus.Margins.Height + 4;
             int blocksize = height * width;
             uint[] pData = System.Buffers.ArrayPool<uint>.Shared.Rent(blocksize);
+
+            pData.AsSpan(0, blocksize).Clear();
 
             try
             {
